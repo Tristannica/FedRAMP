@@ -40,6 +40,14 @@ h1 {
     display: block;
 }
 
+.dropdown-content p {
+    color: #555;
+    padding: 2px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.9em;
+}
+
 .dropdown-content a:hover {background-color: #f1f1f1}
 
 .show {display:block;}

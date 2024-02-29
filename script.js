@@ -1,6 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+    fetch('controls.json') // Make sure to update this path
+        .then(response => response.json())
+        .then(data => populateDropdowns(data))
+        .catch(error => console.error('Error loading the JSON data: ', error));
+});
+
+function populateDropdowns(data) {
     const controlsContainer = document.getElementById('controls-container');
-    const data = controls; // Assuming `controls.json` is the variable containing your JSON data
 
     Object.keys(data).forEach(family => {
         const dropdown = document.createElement('div');
@@ -16,25 +22,35 @@ document.addEventListener('DOMContentLoaded', function() {
         dropdownContent.className = 'dropdown-content';
 
         data[family].forEach(control => {
-            const a = document.createElement('a');
-            a.href = '#';
-            a.innerText = `${control.ID}: ${control['Control Name']}`;
-            dropdownContent.appendChild(a);
+            const controlElement = document.createElement('a');
+            controlElement.href = '#';
+            controlElement.innerText = `${control.ID}: ${control['Control Name']}`;
+            dropdownContent.appendChild(controlElement);
+
+            // Nested Description and Discussion under each control
+            const descriptionElement = document.createElement('p');
+            descriptionElement.innerText = `Description: ${control['NIST Control Description']}`;
+            descriptionElement.style.marginLeft = '20px';
+            dropdownContent.appendChild(descriptionElement);
+
+            const discussionElement = document.createElement('p');
+            discussionElement.innerText = `Discussion: ${control['NIST Discussion']}`;
+            discussionElement.style.marginLeft = '20px';
+            dropdownContent.appendChild(discussionElement);
         });
 
         dropdown.appendChild(button);
         dropdown.appendChild(dropdownContent);
         controlsContainer.appendChild(dropdown);
     });
-});
+}
 
-// Close the dropdown if the user clicks outside of it
+// Close the dropdown menus if the user clicks outside of them
 window.onclick = function(event) {
     if (!event.target.matches('.dropdown button')) {
         var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
+        for (let i = 0; i < dropdowns.length; i++) {
+            let openDropdown = dropdowns[i];
             if (openDropdown.classList.contains('show')) {
                 openDropdown.classList.remove('show');
             }
